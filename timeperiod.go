@@ -100,3 +100,10 @@ func NewTimePeriod(start time.Time, period time.Duration) TimePeriod {
 		End:   start.Add(period),
 	}
 }
+
+func NewTimePeriodWithEndTime(start time.Time, end time.Time) TimePeriod {
+	return TimePeriod{
+		Start: start,
+		End:   end,
+	}
+}
