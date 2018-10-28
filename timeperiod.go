@@ -93,15 +93,7 @@ func (tp TimePeriod) String() string {
 	return tp.Format(SimpleDateTimeFormat)
 }
 
-// NewTimePeriod returns a TimePeriod starting at the given time and ending at the given time plus the given duration
-func NewTimePeriod(start time.Time, period time.Duration) TimePeriod {
-	return TimePeriod{
-		Start: start,
-		End:   start.Add(period),
-	}
-}
-
-func NewTimePeriodWithEndTime(start time.Time, end time.Time) TimePeriod {
+func NewTimePeriod(start time.Time, end time.Time) TimePeriod {
 	return TimePeriod{
 		Start: start,
 		End:   end,

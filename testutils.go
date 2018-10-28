@@ -3,10 +3,9 @@ package techan
 import (
 	"fmt"
 	"math/rand"
+	"strconv"
 	"testing"
 	"time"
-
-	"strconv"
 
 	"github.com/sdcoffey/big"
 	"github.com/stretchr/testify/assert"
@@ -37,7 +36,9 @@ func randomTimeSeries(size int) *TimeSeries {
 func mockTimeSeriesOCHL(values ...[]string) *TimeSeries {
 	ts := NewTimeSeries()
 	for i, ochl := range values {
-		candle := NewCandle(NewTimePeriod(time.Unix(int64(i), 0), time.Second))
+		startTime := time.Unix(int64(i), 0)
+		endTime := startTime.Add(time.Second)
+		candle := NewCandle(NewTimePeriod(startTime, endTime))
 		candle.OpenPrice = big.NewFromString(ochl[0])
 		candle.ClosePrice = big.NewFromString(ochl[1])
 		candle.MaxPrice = big.NewFromString(ochl[2])
@@ -53,7 +54,9 @@ func mockTimeSeriesOCHL(values ...[]string) *TimeSeries {
 func mockTimeSeries(values ...string) *TimeSeries {
 	ts := NewTimeSeries()
 	for _, val := range values {
-		candle := NewCandle(NewTimePeriod(time.Unix(int64(candleIndex), 0), time.Second))
+		startTime := time.Unix(int64(candleIndex), 0)
+		endTime := startTime.Add(time.Second)
+		candle := NewCandle(NewTimePeriod(startTime, endTime))
 		candle.OpenPrice = big.NewFromString(val)
 		candle.ClosePrice = big.NewFromString(val)
 		candle.MaxPrice = big.NewFromString(val)

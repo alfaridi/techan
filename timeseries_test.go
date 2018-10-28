@@ -19,7 +19,8 @@ func TestTimeSeries_AddCandle(t *testing.T) {
 	t.Run("Adds candle if last is nil", func(t *testing.T) {
 		ts := NewTimeSeries()
 
-		candle := NewCandle(NewTimePeriod(time.Now(), time.Minute))
+		now := time.Now()
+		candle := NewCandle(NewTimePeriod(now, now.Add(time.Minute)))
 		candle.ClosePrice = big.NewDecimal(1)
 
 		ts.AddCandle(candle)
@@ -31,13 +32,13 @@ func TestTimeSeries_AddCandle(t *testing.T) {
 		ts := NewTimeSeries()
 
 		now := time.Now()
-		candle := NewCandle(NewTimePeriod(now, time.Minute))
+		candle := NewCandle(NewTimePeriod(now, now.Add(time.Minute)))
 		candle.ClosePrice = big.NewDecimal(1)
 
 		ts.AddCandle(candle)
 		then := now.Add(-time.Minute * 10)
 
-		nextCandle := NewCandle(NewTimePeriod(then, time.Minute))
+		nextCandle := NewCandle(NewTimePeriod(then, now.Add(time.Minute)))
 		candle.ClosePrice = big.NewDecimal(2)
 
 		ts.AddCandle(nextCandle)
@@ -51,7 +52,7 @@ func TestTimeSeries_LastCandle(t *testing.T) {
 	ts := NewTimeSeries()
 
 	now := time.Now()
-	candle := NewCandle(NewTimePeriod(now, time.Minute))
+	candle := NewCandle(NewTimePeriod(now, now.Add(time.Minute)))
 	candle.ClosePrice = big.NewDecimal(1)
 
 	ts.AddCandle(candle)
@@ -60,7 +61,7 @@ func TestTimeSeries_LastCandle(t *testing.T) {
 	assert.EqualValues(t, 1, ts.LastCandle().ClosePrice.Float())
 
 	next := time.Now().Add(time.Minute)
-	newCandle := NewCandle(NewTimePeriod(next, time.Minute))
+	newCandle := NewCandle(NewTimePeriod(next, now.Add(time.Minute)))
 	newCandle.ClosePrice = big.NewDecimal(2)
 
 	ts.AddCandle(newCandle)
@@ -74,12 +75,14 @@ func TestTimeSeries_LastCandle(t *testing.T) {
 func TestTimeSeries_LastIndex(t *testing.T) {
 	ts := NewTimeSeries()
 
-	candle := NewCandle(NewTimePeriod(time.Now(), time.Minute))
+	now := time.Now()
+	candle := NewCandle(NewTimePeriod(now, now.Add(time.Minute)))
 	ts.AddCandle(candle)
 
 	assert.EqualValues(t, 0, ts.LastIndex())
 
-	candle = NewCandle(NewTimePeriod(time.Now().Add(time.Minute), time.Minute))
+	now2 := time.Now().Add(time.Minute)
+	candle = NewCandle(NewTimePeriod(now2, now2.Add(time.Minute)))
 	ts.AddCandle(candle)
 
 	assert.EqualValues(t, 1, ts.LastIndex())
